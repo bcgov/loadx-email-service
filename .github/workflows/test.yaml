@@ -1,0 +1,126 @@
+name: 1. Build & Deploy to Test
+
+#Will automatically run on a push to main, but can also be run manually
+on:
+  push:
+    branches: [ "main" ]
+    paths-ignore:
+    - '.github/**'
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  PHPLIST_IMAGE_NAME: ${{ github.repository }}-phplist
+  JOBS_IMAGE_NAME: ${{ github.repository }}-jobs
+
+jobs:
+  build-and-push-phplist:
+    runs-on: ubuntu-latest
+    name: Build & Push phplist Image
+    environment: test
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+    
+      - name: Log in to the Container registry
+        uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.PHPLIST_IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest
+            type=raw,value=latest-test
+            type=sha,format=long
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4
+
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7
+        with:
+          context: ./compose/phplist
+          file: ./compose/phplist/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+
+  build-and-push-jobs:
+    runs-on: ubuntu-latest
+    name: Build & Push Jobs Image
+    environment: test
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+    
+      - name: Log in to the Container registry
+        uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.JOBS_IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest
+            type=raw,value=latest-test
+            type=sha,format=long
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4
+
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7
+        with:
+          context: ./compose/jobs
+          file: ./compose/jobs/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  update-openshift:
+    needs: [build-and-push-phplist, build-and-push-jobs]
+    runs-on: ubuntu-latest
+    name: Deploy Latest Images to OpenShift Silver
+    permissions:
+      contents: read
+    environment:
+      name: test
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+    - name: OC Setup
+      uses: ./.github/actions/oc-setup
+      with:
+        server: ${{ vars.OPENSHIFT_SERVER }}
+        token: ${{ secrets.OPENSHIFT_TOKEN }}
+        namespace: ${{ vars.OPENSHIFT_NAMESPACE }}
+
+    - name: Helm upgrade on OpenShift Gold Environment
+      run: |
+        helm upgrade tst-loadx -f ./infrastructure/main/values-tst.yaml ./infrastructure/main --set phplist.phplistImageTag="sha-${{ github.sha }}" --set phplist.jobsImageTag="sha-${{ github.sha }}"

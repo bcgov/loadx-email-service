@@ -1,11 +1,7 @@
-name: 1. Build & Deploy to Dev
+name: 2. Build & Deploy to Prod
 
 #Will automatically run on a push to main, but can also be run manually
 on:
-  push:
-    branches: [ "main" ]
-    paths-ignore:
-    - '.github/**'
   workflow_dispatch:
 
 env:
@@ -14,10 +10,10 @@ env:
   JOBS_IMAGE_NAME: ${{ github.repository }}-jobs
 
 jobs:
-  build-and-push-frontend:
+  build-and-push-phplist:
     runs-on: ubuntu-latest
     name: Build & Push phplist Image
-    environment: dev
+    environment: prod
     permissions:
       contents: read
       packages: write
@@ -40,7 +36,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.PHPLIST_IMAGE_NAME }}
           tags: |
             type=raw,value=latest
-            type=raw,value=latest-dev
+            type=raw,value=latest-prod
             type=sha,format=long
 
       - name: Set up Docker Buildx
@@ -50,7 +46,7 @@ jobs:
         id: push
         uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7
         with:
-          context: .
+          context: ./compose/phplist
           file: ./compose/phplist/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -59,10 +55,10 @@ jobs:
           cache-to: type=gha,mode=max
 
 
-  build-and-push-backend:
+  build-and-push-jobs:
     runs-on: ubuntu-latest
     name: Build & Push Jobs Image
-    environment: dev
+    environment: prod
     permissions:
       contents: read
       packages: write
@@ -85,7 +81,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.JOBS_IMAGE_NAME }}
           tags: |
             type=raw,value=latest
-            type=raw,value=latest-dev
+            type=raw,value=latest-prod
             type=sha,format=long
 
       - name: Set up Docker Buildx
@@ -95,7 +91,7 @@ jobs:
         id: push
         uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7
         with:
-          context: .
+          context: ./compose/jobs
           file: ./compose/jobs/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -104,13 +100,13 @@ jobs:
           cache-to: type=gha,mode=max
 
   update-openshift:
-    needs: [build-and-push-frontend, build-and-push-backend]
+    needs: [build-and-push-phplist, build-and-push-jobs]
     runs-on: ubuntu-latest
     name: Deploy Latest Images to OpenShift Silver
     permissions:
       contents: read
     environment:
-      name: dev
+      name: prod
     steps:
     - name: Checkout code
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -123,4 +119,4 @@ jobs:
 
     - name: Helm upgrade on OpenShift Gold Environment
       run: |
-        helm upgrade tst-loadx -f ./infrastructure/main/values-tst.yaml ./infrastructure/main --set phplist.phplistImageTag="sha-${{ github.sha }}" --set phplist.jobsImageTag="sha-${{ github.sha }}"
+        helm upgrade prd-loadx -f ./infrastructure/main/values-prd.yaml ./infrastructure/main --set phplist.phplistImageTag="sha-${{ github.sha }}" --set phplist.jobsImageTag="sha-${{ github.sha }}"

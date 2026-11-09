@@ -1,0 +1,30 @@
+---
+# 1. Persistent Storage for MariaDB
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ template "app.fullname" . }}-mariadb-data
+  labels: {{ include "app.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/resource-policy: keep
+spec:
+  accessModes: {{ toYaml .Values.mariadb.persistence.data.accessModes | nindent 4 }}
+  resources:
+    requests:
+      storage: {{ .Values.mariadb.persistence.data.size | quote }}
+---
+# 1b. Persistent Storage for MariaDB Backups
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ template "app.fullname" . }}-mariadb-backup
+  labels: {{ include "app.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/resource-policy: keep
+spec:
+  accessModes: {{ toYaml .Values.mariadb.persistence.backup.accessModes | nindent 4 }}
+  storageClassName: {{ .Values.mariadb.persistence.backup.storageClassName | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.mariadb.persistence.backup.size | quote }}
+---

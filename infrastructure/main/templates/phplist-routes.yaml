@@ -1,0 +1,98 @@
+{{- $vanityRoute := lookup "route.openshift.io/v1" "Route" .Release.Namespace (printf "%s-phplist-vanityurl" (include "app.fullname" .)) -}}
+{{- $adminVanityRoute := lookup "route.openshift.io/v1" "Route" .Release.Namespace (printf "%s-phplist-admin-vanityurl" (include "app.fullname" .)) -}}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ template "app.fullname" . }}-phplist
+  labels: {{ include "app.labels" . | nindent 4 }}
+spec:
+  {{- with .Values.phplist.route.host }}
+  host: {{ . | quote }}
+  {{- end }}
+  to:
+    kind: Service
+    name: {{ include "app.fullname" . }}-phplist
+  port:
+    targetPort: {{ .Values.phplist.service.port }}
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
+
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ template "app.fullname" . }}-phplist-admin
+  labels: {{ include "app.labels" . | nindent 4 }}
+  annotations:
+    haproxy.router.openshift.io/ip_whitelist: {{ .Values.phplist.route.adminWhitelist | quote }}
+spec:
+  {{- with .Values.phplist.route.host }}
+  host: {{ . | quote }}
+  {{- end }}
+  to:
+    kind: Service
+    name: {{ include "app.fullname" . }}-phplist
+  port:
+    targetPort: {{ .Values.phplist.service.port }}
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
+  path: /lists
+
+
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ template "app.fullname" . }}-phplist-vanityurl
+  labels: {{ include "app.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/resource-policy: keep
+spec:
+  {{- with .Values.phplist.route.vanityHost }}
+  host: {{ . | quote }}
+  {{- end }}
+  to:
+    kind: Service
+    name: {{ include "app.fullname" . }}-phplist
+  port:
+    targetPort: {{ .Values.phplist.service.port }}
+  tls:
+    {{- if and $vanityRoute $vanityRoute.spec.tls }}
+    {{ toYaml $vanityRoute.spec.tls | nindent 4 }}
+    {{ else }}
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+    {{- end }}
+  wildcardPolicy: None
+
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ template "app.fullname" . }}-phplist-admin-vanityurl
+  labels: {{ include "app.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/resource-policy: keep
+    haproxy.router.openshift.io/ip_whitelist: {{ .Values.phplist.route.adminWhitelist | quote }}
+spec:
+  {{- with .Values.phplist.route.vanityHost }}
+  host: {{ . | quote }}
+  {{- end }}
+  to:
+    kind: Service
+    name: {{ include "app.fullname" . }}-phplist
+  port:
+    targetPort: {{ .Values.phplist.service.port }}
+  tls:
+    {{- if and $adminVanityRoute $adminVanityRoute.spec.tls }}
+    {{ toYaml $adminVanityRoute.spec.tls | nindent 4 }}
+    {{ else }}
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+    {{- end }}
+  wildcardPolicy: None
+  path: /lists

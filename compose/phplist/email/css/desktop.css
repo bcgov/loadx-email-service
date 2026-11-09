@@ -1,0 +1,267 @@
+html, body {
+    font:normal medium verdana;
+    margin:0;
+    padding:0;
+    border:0 none;
+    min-width: 36em;
+}
+
+td {
+/*    vertical-align: top;*/
+    white-space: nowrap;
+}
+
+.error_msg {
+	color: red;
+	font-weight: bold;
+}
+
+/* Start of subscription page styles */
+#subscribe {
+		position:relative;
+		width:36em; 		/* Width of field-area box */
+  		margin-left: auto ;
+  		margin-right: auto ;
+  		text-align:left; 
+		font:medium tahoma, arial, helvetica, sans-serif;
+}
+#subscribe h1 {font-size:medium;}
+#subscribe h2 {font-size:1.2em;}
+#subscribe .emailLbl {width:14em;}
+#subscribe .emailTxt {width:50em; max-width:580px;}
+#subscribe .freq {margin-top:1.3em;}
+#subscribe .filters {}
+#subscribe fieldset.step label {margin: 0 0 0 .5em;}		/* override stepy.css */
+#subscribe .info_msg {padding-bottom:.6em;}
+#subscribe .error {font-size:large; font-weight:bold;}
+#subscribe input[type="checkbox"] {vertical-align: middle; }		/* Align checkbox to label */
+
+
+/* ------------------------- */
+/* Step 2 of 3 - Filter page */
+/* ------------------------- */
+#step2 ul {
+	margin: .3em 0 0 1em;
+	padding: 0 0 0 0;
+	float: left;
+}
+#step2 li {
+	list-style: none;
+}	
+#step2 li:first-child{
+	font: bold x-small verdana;
+}
+
+/* ------------------------- */
+/* Step 3 of 3 - Review page */
+/* ------------------------- */
+#filter_review ul {
+	margin: .3em 0 0 0;
+	padding: .3em 0 0 0;
+	padding-top: 1em;
+	float: left;
+	width: 100%;
+}
+#filter_review li:first-child{
+	float: left;	
+	width: 15em;
+	padding: 0;
+	color: #444;
+	font: bold x-small verdana;
+}
+#filter_review li {
+	float: left;
+	list-style: none;
+	width: 35em;
+}	
+
+
+
+#subscribe_confirm h1 {
+	font-size:medium;
+	text-align: center;
+}
+#subscribe_confirm h2 {
+	font-size:1.2em;
+	text-align: center;
+}
+#subscribe_confirm li {
+/*	display: inline;*/
+	list-style: none;
+	padding-top: 1em;
+}
+
+#unsubscribe {
+		position:relative;
+		width:40em; 
+  		margin-left: auto ;
+  		margin-right: auto ;
+  		text-align:left; 
+		font:medium tahoma, arial, helvetica, sans-serif;
+}
+#unsubscribe h1 {
+	font-size:medium;
+	text-align: center;
+}
+#unsubscribe li {
+	display: inline;
+	list-style: none;
+}
+
+#unsubscribereason {
+	width: 40em;
+	height: 10em;
+}
+		
+/* Override jquery.stepy.css */
+#subscribeForm-title-0 {display: none;}		/* Hides fieldset label */	
+#subscribeForm-title-1 {display: none;}		/* Hides fieldset label */
+#subscribeForm-title-2 {display: none;}		/* Hides fieldset label */
+/* End of override jquery.stepy.css */
+
+#subscribe_disclaimer {
+	font:medium verdana, tahoma, arial;
+	font-size:small;
+	position:relative; 
+	width:45em; 
+	text-align: left;
+	margin-left: auto ;
+	margin-right: auto ;
+}
+#subscribe_disclaimer h1{
+	text-align: center;
+}
+#subscribe_disclaimer li {
+	padding-bottom: 1em;
+	list-style: none;
+}
+
+#subscribe_confirm {
+	font:medium tahoma, arial, helvetica, sans-serif;
+	position:relative; 
+	width:50em; 
+	text-align: left;
+	margin-left: auto ;
+	margin-right: auto ;
+}
+#subscribe_confirm h1 {
+}
+#subscribe_confirm .notification_list {
+	font-weight:bold;
+}
+#subscribe_confirm .confirm_error{
+	font-weight:normal;
+}
+
+#subscribe .input-prompt {
+  position: absolute;
+  color: #aaa;
+  margin: 0.4em 0 0 1.5em;
+}
+
+#subscribe div.jq-popup {
+	display: none;
+}
+#subscribe div.jq-popup {	/* popup */
+	position: absolute;
+	background-color: #F0E68C;
+	z-index: 100;
+}
+#subscribe div.jq-popup p{	/* Message */
+	font-size: 1em;
+	padding: .2em .2em .2em .2em;
+	color: #000000;
+	font-weight: normal;
+	line-height: 1.3em;
+	margin: .2em;
+	cursor: pointer;
+}
+/* ----- clear fix for floats ----- */
+#subscribe .jq-clearfix:after { content: "."; display:block; height:0; clear:both; visibility:hidden; }
+#subscribe .jq-clearfix { display:inline-block; }		
+/* hides clearfix from IE-mac \*/
+* html .jq-clearfix { height:1%; }
+#subscribe .jq-clearfix { display:block; }
+/* end hide from IE-mac */
+
+
+/* From stepy.css */
+fieldset {
+	border: .1em solid #DDD;
+	clear: left;
+	font: x-small verdana;
+}
+
+
+fieldset legend {
+	color: #4080BF;
+	font: bold larger verdana;
+	padding: 0 .2em .3em .2em;
+}
+
+fieldset input, fieldset textarea, fieldset select {
+	font: x-small verdana;
+	margin-left: .5em;
+}
+
+fieldset label {
+	color: #444;
+	display: block;
+	font: bold x-small verdana;
+	margin: .3em 0 .2em .4em;
+}
+
+#serviceareatable LABEL {
+	font-size:inherit;
+	font-weight:inherit;
+	margin:0px;
+	padding:0px;
+	display:inline;	
+}
+
+
+
+/* End of subscription page styles */
+/* CHOOSE page styles ================================================= */
+#chooseDiv {
+	position:relative;
+	width:35em; 		/* Width of field-area box */
+	margin-left: auto ;
+	margin-right: auto ;
+	text-align:left; 
+	font:medium tahoma, arial, helvetica, sans-serif;
+	text-align: center;
+}
+
+.choice {
+	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	box-shadow:inset 0px 1px 0px 0px #ffffff;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #f9a825), color-stop(1, #ffffbf) );
+	background:-moz-linear-gradient( center top, #f9a825 5%, #ffffbf 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f9a825', endColorstr='#ffffbf');
+	background-color:#f9a825;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #dcdcdc;
+	display:inline-block;
+	color:#777777;
+	font-family:arial;
+	font-size:15px;
+	font-weight:bold;
+	text-decoration:none;
+	text-shadow:1px 1px 0px #ffffff;
+	padding:1em 2em;
+	margin:2em;
+	width:25em;
+}.choice:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ffffbf), color-stop(1, #f9a825) );
+	background:-moz-linear-gradient( center top, #ffffbf 5%, #f9a825 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffbf', endColorstr='#f9a825');
+	background-color:#ffffbf;
+}.choice:active {
+	position:relative;
+	top:1px;
+}
+// End of CHOOSE page styles =================================================

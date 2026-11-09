@@ -1,0 +1,58 @@
+{{- $deploymentTime := now | date "2006-01-02 15:04:05.000000" -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "app.fullname" . }}-phplist
+  labels: {{ include "app.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.phplist.replicas }}
+  selector:
+    matchLabels:
+      {{- include "app.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: phplist
+  template:
+    metadata:
+      labels:
+        {{- include "app.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: phplist
+    spec:
+      containers:
+        - name: phplist
+          image: {{ printf "%s:%s" .Values.phplist.phplistImage .Values.phplist.phplistImageTag | quote }}
+          envFrom:
+            - secretRef:
+                name: {{ include "app.fullname" . }}-phplist
+            - configMapRef:
+                name: {{ include "app.fullname" . }}-phplist
+          env:
+            - name: PHPLIST_DATABASE_HOST
+              value: {{ printf "%s-mariadb" (include "app.fullname" .) | quote }}
+            - name: PHPLIST_DATABASE_PORT
+              value: {{ .Values.mariadb.service.port | quote }}
+            - name: PHPLIST_DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "app.fullname" . }}-mariadb
+                  key: MARIADB_DATABASE
+            - name: PHPLIST_DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "app.fullname" . }}-mariadb
+                  key: MARIADB_USER
+            - name: PHPLIST_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "app.fullname" . }}-mariadb
+                  key: MARIADB_PASSWORD
+            - name: DEPLOYMENT_TIME
+              value: {{ $deploymentTime | quote }}
+          resources:
+{{ toYaml .Values.phplist.resources | indent 12 }}
+          ports:
+            - containerPort: {{ .Values.phplist.service.port }}
+          volumeMounts:
+            - name: tmp-dir
+              mountPath: /tmp
+      volumes:
+        - name: tmp-dir
+          emptyDir: {}

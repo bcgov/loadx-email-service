@@ -1,0 +1,79 @@
+fullnameOverride: tst-loadx
+nameOverride: tst-loadx
+
+mariadb:
+  image: artifacts.developer.gov.bc.ca/docker-remote/library/mariadb:12.3
+  replicas: 1
+  resources:
+    limits:
+      cpu: 100m
+      memory: 500Mi
+    requests:
+      cpu: 10m
+      memory: 100Mi
+  service:
+    port: 3306
+  secret:
+    database: 
+    username: 
+    password: 
+    rootPassword: 
+  persistence:
+    data:
+      accessModes:
+        - ReadWriteOnce
+      size: 1Gi
+    backup:
+      accessModes:
+        - ReadWriteOnce
+      storageClassName: netapp-file-backup
+      size: 1Gi
+
+phplist:
+  phplistImage: artifacts.developer.gov.bc.ca/github-docker-remote/bcgov/loadx-email-service-phplist
+  phplistImageTag: latest
+  jobsImage: artifacts.developer.gov.bc.ca/github-docker-remote/bcgov/loadx-email-service-jobs
+  jobsImageTag: latest
+  replicas: 1
+  resources:
+    limits:
+      cpu: 100m
+      memory: 500Mi
+    requests:
+      cpu: 10m
+      memory: 256Mi
+  service:
+    port: 8080
+  config:
+    keepDays: 31
+    mailHost: apps.smtp.gov.bc.ca
+    loadFilePath: https://tst-loadx.th.gov.bc.ca/feeds/loadrestrictions/
+  secrets:
+    user: 
+    phplistSecret: 
+    adminPassword: 
+    adminEmail: 
+    remoteSecret: 
+  route:
+    host: tst-loadx-phplist.apps.silver.devops.gov.bc.ca
+    vanityHost: tst-loadx.th.gov.bc.ca
+    adminWhitelist: 142.34.53.0/24 142.22.0.0/15 142.24.0.0/13 142.32.0.0/13
+  cron:
+    resources:
+      limits:
+        cpu: 100m
+        memory: 500Mi
+      requests:
+        cpu: 10m
+        memory: 100Mi
+    fetchSchedule: "59 * * * *"
+    fetchConcurrencyPolicy: Replace
+    queueSchedule: "1 * * * *"
+    queueConcurrencyPolicy: Replace
+    cleanupSchedule: "0 1 * * *"
+    concurrencyPolicy: Forbid
+    startingDeadlineSeconds: 3600
+    successfulJobsHistoryLimit: 3
+    failedJobsHistoryLimit: 3
+    backoffLimit: 1
+    activeDeadlineSeconds: 1800

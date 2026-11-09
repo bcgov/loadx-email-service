@@ -1,0 +1,40 @@
+{{- $deploymentTime := now | date "2006-01-02 15:04:05.000000" -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "app.fullname" . }}-mariadb
+  labels: {{ include "app.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.mariadb.replicas }}
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "app.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: mariadb
+  template:
+    metadata:
+      labels:
+        {{- include "app.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: mariadb
+    spec:
+      containers:
+        - name: mariadb
+          image: {{ .Values.mariadb.image | quote }}
+          env:
+            - name: DEPLOYMENT_TIME
+              value: {{ $deploymentTime | quote }}  
+          envFrom:
+            - secretRef:
+                name: {{ include "app.fullname" . }}-mariadb
+          ports:
+            - containerPort: {{ .Values.mariadb.service.port }}
+          resources:
+{{ toYaml .Values.mariadb.resources | indent 12 }}
+          volumeMounts:
+            - name: mariadb-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mariadb-storage
+          persistentVolumeClaim:
+            claimName: {{ include "app.fullname" . }}-mariadb-data

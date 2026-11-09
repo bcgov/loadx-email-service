@@ -1,0 +1,53 @@
+name: Weekly Trivy Image Scan
+
+on:
+  schedule:
+    # Runs every week at 02:00 Sunday Morning.
+    - cron:  '0 2 * * 0'
+  workflow_dispatch:
+
+jobs:
+  imagescan-phplist:
+    name: Scan latest phplist image
+    runs-on: ubuntu-latest
+    permissions: 
+      packages: read
+      security-events: write
+    steps:
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          image-ref: 'ghcr.io/bcgov/loadx-email-service-phplist:latest'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+          limit-severities-for-sarif: true
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@1fc58d04a4d4374f921bdac573c3811c240f9c26 # v4.39.2
+        with:
+          sarif_file: 'trivy-results.sarif'
+  imagescan-jobs:
+    name: Scan latest jobs image
+    runs-on: ubuntu-latest
+    permissions:
+      packages: read
+      security-events: write
+    steps:
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          image-ref: 'ghcr.io/bcgov/loadx-email-service-jobs:latest'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+          limit-severities-for-sarif: true
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@1fc58d04a4d4374f921bdac573c3811c240f9c26 # v4.39.2
+        with:
+          sarif_file: 'trivy-results.sarif'

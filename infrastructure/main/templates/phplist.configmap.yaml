@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "app.fullname" . }}-phplist
+  labels: {{ include "app.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/resource-policy: keep
+{{- $configMap := lookup "v1" "ConfigMap" .Release.Namespace (printf "%s-phplist" (include "app.fullname" .)) }}
+{{- if $configMap }}
+data:
+{{ toYaml $configMap.data | indent 2 }}
+{{- with $configMap.binaryData }}
+binaryData:
+{{ toYaml . | indent 2 }}
+{{- end }}
+{{- else }}
+data:
+  BASE_URL: {{ printf "http://%s-phplist:%v/lists/admin" (include "app.fullname" .) .Values.phplist.service.port | quote }}
+  KEEP_DAYS: {{ .Values.phplist.config.keepDays | quote }}
+  MAILHOST: {{ .Values.phplist.config.mailHost | quote }}
+  LOAD_FILE_PATH: {{ .Values.phplist.config.loadFilePath | quote }}
+  PUBLIC_BASE_URL: {{ printf "https://%s" .Values.phplist.route.host | quote }}
+{{- end }}
