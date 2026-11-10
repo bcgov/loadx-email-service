@@ -1,0 +1,496 @@
+body
+{
+/*	background-color: #004B8D; /* Background color */
+/*	color: #111; /* Foreground color used for text */
+	background-color: White;
+	color: Black;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	margin:0;
+}
+
+a
+{
+	text-decoration: none;
+}
+a img
+{
+	border: none;
+}
+#header > img
+{
+   display: block;
+   margin-top: 5px;
+   margin-left: auto;
+   margin-right: auto;
+}
+
+#content h2
+{
+	background-color: #eee;
+	border-bottom: 1px solid #666;
+	color: #000;
+	display: block;
+	font-size: 14px;
+	font-weight: bold;
+	padding: 10px 5px 10px 5px;
+	text-align: center;
+	margin: 0;
+}
+
+#content
+{
+	padding-left:10px;
+	padding-right:10px;
+}
+#header h1
+{
+	margin: 0;
+	background-color: #004B8D;
+	/* border-bottom: 1px solid #666; */
+	color: #eee;
+	display: block;
+	font-size: 20px;
+	font-weight: bold;
+	padding: 10px 0 10px 0;
+	text-align: center;
+	text-decoration: none;
+	text-shadow: 0px 1px 0px #444;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#99BBE8), to(#004B8D));
+	background-image: -moz-linear-gradient(top, #99BBE8, #004B8D);
+}
+
+#header h2
+{
+	margin: 0;
+	color: #fff;
+	display: block;
+	font-size: 18px;
+	font-weight: bold;
+	padding: 10px 0 0 0;
+	text-align: center;
+	text-decoration: none;
+	text-shadow: 0px 1px 0px #444;
+}
+
+#header a img
+{
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	border: 0;
+}
+
+#header ul, #content ul, #footer ul
+{
+	list-style: none;
+}
+
+#content ul li > img:first-child
+{
+	margin:7px 0px 0px -35px;
+	float: left;
+}
+#content ul li.listhead > img:first-child
+{
+	margin:-5px 0px 0px -43px;
+}
+
+#content ul li.nobullet> img:first-child
+{
+	margin:-3px 0px 0px -35px;
+}
+
+#content ul li > a
+{
+	background: url(../images/next.png) no-repeat right center;
+	display: block;
+	padding: 12px 35px 12px 16px;
+	color: #222;
+}
+
+#content ul li > div
+{
+	padding: 12px 0px 12px 16px; 
+}
+
+#content ul li
+{
+	border: 1px solid #999999;
+	color: #222222;
+	font-size: 14px;
+	font-weight: bold;
+	margin-bottom: -1px;
+	background-color: #fff;
+}
+
+/* the following entry is for descriptive text in the detailed about and help pages */
+#content ul li.plaintext
+{
+	font-weight: normal;
+}
+
+/* the following entry is for a bulleted list within the current li structure*/
+#content ul li.bullet
+{
+	border: none;
+	font-weight: normal;
+	list-style-type: disc;
+	padding: 5px 10px;
+}
+
+
+
+
+#content ul li.listhead
+{
+	border: 1px solid #999999;
+	color: #222;
+	display: block;
+	font-size: 14px;
+	font-weight: bold;
+	margin-bottom: -1px;
+	padding: 12px 8px;
+	text-decoration: none;
+	background-color: #ddd;
+}
+
+
+a.flink, a.flink:link, a.flink:visited {
+	color: #fff;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+#header ul li:first-child, #header ul li:first-child a, #content ul li:first-child, #content ul li:first-child a
+{
+	-webkit-border-top-left-radius: 8px;
+	-webkit-border-top-right-radius: 8px;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	-moz-border-radius-topleft: 8px;
+	-moz-border-radius-topright: 8px;
+}
+#header ul li:last-child, #header ul li:last-child a, #content ul li:last-child, #content ul li:last-child a
+{
+	-webkit-border-bottom-left-radius: 8px;
+	-webkit-border-bottom-right-radius: 8px;
+	border-bottom-left-radius: 8px;
+	border-bottom-right-radius: 8px;
+	-moz-border-radius-bottomleft: 8px;
+	-moz-border-radius-bottomright: 8px;
+}
+
+
+#event-table
+{
+	font-family: Helvetica;
+	font-size: 14px;
+	border-collapse: collapse;
+	width: 100%;
+}
+#event-table td
+{
+	padding: 8px;
+	color: #336;
+	font-weight: normal;
+}
+#event-table tr
+{
+	border-top:solid 1px gray;
+}
+
+
+#content p
+{
+	padding: 0px 14px;
+}
+
+#content .imageButton
+{
+	display: inline;
+	padding: 5px;
+	background-color: #357EC7;
+	background-image: none;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#004B8D), to(#99BBE8));
+	background-image: -moz-linear-gradient(top, #004B8D, #99BBE8);
+	text-align:center;
+	color:White;
+	font-weight:bold;
+	font-size:smaller;
+	white-space : nowrap;
+}
+
+.roundedCorner
+{
+	border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+}
+label
+{
+	cursor:pointer;
+}
+.field
+{
+	width: 100%;
+	margin-bottom: 10px;
+	border:none;
+}
+.fieldText
+{
+	 color: White;
+}
+#content ul li > div.webcam-thumb
+{
+	padding-right:35px;
+}
+
+/*used by rounded corner sections that don't have left padding for icons*/
+ul.noindent
+{
+	margin-left:0px;
+	padding-left:0px;
+}
+
+#buttons {
+	margin-left: 40px;	
+}
+
+
+.normalFont
+{
+	font-weight:normal;
+}
+
+.italicFont
+{
+	font-style:italic;
+	font-size:0.8em;
+}
+
+/**********************************************/
+/* DRIVEBC EMAIL SUBSCRIPTION SPECIFIC STYLES */
+/**********************************************/
+#subscribe {
+	position:relative;
+	margin-left: auto ;
+	margin-right: auto ;
+	text-align:left;
+}
+#subscribe h1
+{
+	margin: 0;
+	color: #eee;
+	display: block;
+	font-size: 20px;
+	font-weight: bold;
+	padding: 10px 0 10px 0;
+	text-align: center;
+	text-decoration: none;
+	text-shadow: 0px 1px 0px #444;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#99BBE8), to(#004B8D));
+	background-image: -moz-linear-gradient(top, #99BBE8, #004B8D);
+}
+#unsubscribe h1
+{
+	margin: 0;
+	color: #eee;
+	display: block;
+	font-size: 20px;
+	font-weight: bold;
+	padding: 10px 0 10px 0;
+	text-align: center;
+	text-decoration: none;
+	text-shadow: 0px 1px 0px #444;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#99BBE8), to(#004B8D));
+	background-image: -moz-linear-gradient(top, #99BBE8, #004B8D);
+}
+
+#subscribe_disclaimer {
+	font:medium verdana, tahoma, arial;
+	font-size:small;
+	position:relative;  
+	text-align: left;
+	margin-left: auto ;
+	margin-right: auto ;
+}
+#subscribe_disclaimer ul {
+	margin-left:0px;
+	padding-left:0px;
+	margin: 0 1em;
+}
+#subscribe_disclaimer li {
+	padding-bottom: 1em;
+	list-style: none;
+}
+#dsclmr_accept_btn {
+	background-color: #AAA;
+	color: #000;
+	font: 15px verdana;
+	padding: 1em 3em;	
+	border-radius: 4px;
+	-khtml-border-radius: 4px;
+	-moz-border-radius: 4px;
+	-opera-border-radius: 4px;
+	-webkit-border-radius: 4px;	
+}
+#dsclmr_accept_btn:hover {
+	background-color: #6699CC;
+}
+
+#subscribe .emailLbl {
+	width:14em;
+	font-weight: bold;
+}
+#subscribe .formatLbl {
+	font-weight: bold;
+}
+#subscribe .emailTxt {width:96%;}
+#subscribe fieldset {
+}
+
+#subscribe .info_msg {padding-bottom:.6em;}
+#subscribe .error {font-size:large; font-weight:bold;}
+
+#subscribe ul {
+	margin-left:0px;
+	padding-left:0px;
+	margin: 0 1em; 
+}
+#subscribe li {
+	padding-bottom: 1em;
+	list-style: none;
+}
+
+#unsubscribe ul {
+	margin-left:0px;
+	padding-left:0px;
+	margin: 1em 1em; 
+}
+#unsubscribe li {
+	padding-bottom: 0em;
+	list-style: none;
+}
+#unsubscribereason {
+	width: 94%;
+	height: 10em;
+}
+
+#subscribe .input-prompt {
+  position: absolute;
+  color: #aaa;
+  margin: 0.2em 0 0 1.2em;
+}
+
+/* ----- clear fix for floats ----- */
+#subscribe .jq-clearfix:after { content: "."; display:block; height:0; clear:both; visibility:hidden; }
+#subscribe .jq-clearfix { display:inline-block; }		
+/* hides clearfix from IE-mac \*/
+* html .jq-clearfix { height:1%; }
+#subscribe .jq-clearfix { display:block; }
+/* end hide from IE-mac */
+
+#subscribe div.jq-popup {
+	display: none;
+}
+#subscribe div.jq-popup {	/* popup */
+	position: absolute;
+	background-color: #F0E68C;
+	z-index: 100;
+}
+#subscribe div.jq-popup p{	/* Message */
+	font-size: 1em;
+	padding: .2em .2em .2em .2em;
+	color: #000000;
+	font-weight: normal;
+	line-height: 1.3em;
+	margin: .2em;
+	cursor: pointer;
+}
+
+/* ------------------------- */
+/* Step 2 of 3 - Filter page */
+/* ------------------------- */
+#step2 ul {
+	margin: 0 0 0 0;
+	padding: 0 0 1em 0;
+	clear: right;
+}
+#step2 li {
+	padding: 0;
+	margin-left: 2em;
+	list-style: none;
+}	
+#step2 li:first-child {	/* Title for the line item. */
+	margin-left: 1em;
+	color: #444;
+	font: verdana;
+	font-weight: bold;
+}
+
+
+/* ------------------------- */
+/* Step 3 of 3 - Review page */
+/* ------------------------- */
+#filter_review ul {
+	width: 100%;
+	float: left;
+}
+#filter_review ul.newline{		/* Pad from line above. */
+	padding-top: 0;
+}
+#filter_review li:first-child{
+	width: 12em;
+	color: #444;
+	font: verdana;
+	font-weight: bold;
+	float: left;
+}
+#filter_review li {
+	list-style: none;
+	float: left;
+}	
+
+/* CHOOSE page styles ================================================= */
+#chooseDiv {
+	position:relative;
+	margin-left: auto ;
+	margin-right: auto ;
+	text-align:left; 
+	font:medium tahoma, arial, helvetica, sans-serif;
+	text-align: center;
+}
+
+.choice {
+	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	box-shadow:inset 0px 1px 0px 0px #ffffff;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
+	background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
+	background-color:#ededed;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #dcdcdc;
+	display:inline-block;
+	color:#777777;
+	font-family:arial;
+	font-size:14px;
+	font-weight:bold;
+	text-decoration:none;
+	text-shadow:1px 1px 0px #ffffff;
+	padding:1em 1em;
+	margin:2em;
+	width:15em;
+}.choice:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) );
+	background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
+	background-color:#dfdfdf;
+}.choice:active {
+	position:relative;
+	top:1px;
+}
+// End of CHOOSE page styles =================================================

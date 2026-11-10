@@ -1,0 +1,30 @@
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+*.secrets.yaml
+*.secrets.yml
+secrets.yaml
+secrets.yml
+*.local.yaml
+*.local.yml
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local editor and operating-system files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs, backups, and generated database exports
+*.log
+*.sql.gz
+*.sql.partial
+*.gz.partial
+backups/
+infrastructure/main/values-secrets.yaml

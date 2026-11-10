@@ -1,0 +1,124 @@
+# 6a. Fetch RSS items (and clean up) just before the hour
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ template "app.fullname" . }}-phplist-fetch
+  labels: {{ include "app.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.phplist.cron.fetchSchedule | quote }}
+  concurrencyPolicy: {{ .Values.phplist.cron.fetchConcurrencyPolicy }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            {{- include "app.selectorLabels" . | nindent 12 }}
+            app.kubernetes.io/component: jobs
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: jobs
+              image: {{ printf "%s:%s" .Values.phplist.jobsImage .Values.phplist.jobsImageTag | quote }}
+              command: ["phplist-remote", "get", "delete"]
+              resources:
+{{ toYaml .Values.phplist.cron.resources | indent 16 }}
+              env:
+                - name: BASE_URL
+                  value: {{ printf "http://%s-phplist:%v/lists/admin" (include "app.fullname" .) .Values.phplist.service.port | quote }}
+                - name: REMOTE_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "app.fullname" . }}-phplist
+                      key: REMOTE_SECRET
+---
+# 6b. Process the queue just after the hour
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ template "app.fullname" . }}-phplist-queue
+  labels: {{ include "app.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.phplist.cron.queueSchedule | quote }}
+  concurrencyPolicy: {{ .Values.phplist.cron.queueConcurrencyPolicy }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            {{- include "app.selectorLabels" . | nindent 12 }}
+            app.kubernetes.io/component: jobs
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: jobs
+              image: {{ printf "%s:%s" .Values.phplist.jobsImage .Values.phplist.jobsImageTag | quote }}
+              command: ["phplist-remote", "queue"]
+              resources:
+{{ toYaml .Values.phplist.cron.resources | indent 16 }}
+              envFrom:
+                - secretRef:
+                    name: {{ include "app.fullname" . }}-phplist
+                - configMapRef:
+                    name: {{ include "app.fullname" . }}-phplist
+---
+# 7. Nightly cleanup CronJob
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ template "app.fullname" . }}-phplist-cleanup
+  labels: {{ include "app.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.phplist.cron.cleanupSchedule | quote }}
+  concurrencyPolicy: {{ .Values.phplist.cron.concurrencyPolicy }}
+  startingDeadlineSeconds: {{ .Values.phplist.cron.startingDeadlineSeconds }}
+  successfulJobsHistoryLimit: {{ .Values.phplist.cron.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.phplist.cron.failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      backoffLimit: {{ .Values.phplist.cron.backoffLimit }}
+      activeDeadlineSeconds: {{ .Values.phplist.cron.activeDeadlineSeconds }}
+      template:
+        metadata:
+          labels:
+            {{- include "app.selectorLabels" . | nindent 12 }}
+            app.kubernetes.io/component: jobs
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: cleanup
+              image: {{ printf "%s:%s" .Values.phplist.jobsImage .Values.phplist.jobsImageTag | quote }}
+              command: ["sh", "-ec", "backup.sh && db --table < /usr/local/bin/cleanup.sql"]
+              resources:
+{{ toYaml .Values.phplist.cron.resources | indent 16 }}
+              envFrom:
+                - secretRef:
+                    name: {{ include "app.fullname" . }}-phplist
+                - configMapRef:
+                    name: {{ include "app.fullname" . }}-phplist
+              env:
+                - name: PHPLIST_DATABASE_HOST
+                  value: {{ printf "%s-mariadb" (include "app.fullname" .) | quote }}
+                - name: PHPLIST_DATABASE_PORT
+                  value: {{ .Values.mariadb.service.port | quote }}
+                - name: PHPLIST_DATABASE_NAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "app.fullname" . }}-mariadb
+                      key: MARIADB_DATABASE
+                - name: PHPLIST_DATABASE_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "app.fullname" . }}-mariadb
+                      key: MARIADB_USER
+                - name: PHPLIST_DATABASE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "app.fullname" . }}-mariadb
+                      key: MARIADB_PASSWORD
+              volumeMounts:
+                - name: backup
+                  mountPath: /backups
+          volumes:
+            - name: backup
+              persistentVolumeClaim:
+                claimName: {{ include "app.fullname" . }}-mariadb-backup
