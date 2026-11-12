@@ -2,7 +2,7 @@ fullnameOverride: prd-loadx
 nameOverride: prd-loadx
 
 mariadb:
-  image: docker.io/library/mariadb:12.3
+  image: artifacts.developer.gov.bc.ca/docker-remote/library/mariadb:12.3
   replicas: 1
   resources:
     limits:
