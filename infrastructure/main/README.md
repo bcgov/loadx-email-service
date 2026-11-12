@@ -38,7 +38,9 @@ Treat the values file as a secret. The chart renders Secret resources from these
 | `mariadb.persistence.backup.*` | Backup PVC access modes, storage class, and requested size |
 | `phplist.image`, `phplist.jobsImage`, `phplist.replicas`, `phplist.resources` | phpList and jobs images, phpList replica count, and phpList container requests/limits |
 | `phplist.service.port` | phpList service and container port |
-| `phplist.config.*` | phpList mail host, feed path, and backup retention period |
+| `phplist.config.keepDays` | Number of days to retain **database backup files**; exported as `KEEP_DAYS` for the backup job. This does not control phpList database records or RSS items. |
+| `phplist.config.rssKeepDays` | Number of days to retain RSS items; passed to the RSS cleanup job as `RSS_KEEP_DAYS`. |
+| `phplist.config.mailHost`, `phplist.config.loadFilePath` | phpList mail host and feed path |
 | `phplist.secrets.*` | Initial phpList user, admin credentials, and remote-processing secret |
 | `phplist.route.host` | Shared host for both public and admin Routes and the generated `PUBLIC_BASE_URL` |
 | `phplist.route.vanityHost` | Shared host for the generated public and admin vanity Routes |
