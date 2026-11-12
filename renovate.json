@@ -2,5 +2,10 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "github>bcgov/renovate-config#2026.10.29"
-  ]
+  ],
+  "helm-values": {
+    "managerFilePatterns": [
+      "/(^|/)values.*\\.ya?ml$/"
+    ]
+  }
 }
