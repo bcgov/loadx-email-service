@@ -7,5 +7,8 @@
     "managerFilePatterns": [
       "/(^|/)values.*\\.ya?ml$/"
     ]
+  },
+  "registryAliases": {
+    "artifacts.developer.gov.bc.ca/docker-remote": "docker.io"
   }
 }
