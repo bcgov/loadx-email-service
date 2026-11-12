@@ -87,7 +87,7 @@ spec:
           containers:
             - name: cleanup
               image: {{ printf "%s:%s" .Values.phplist.jobsImage .Values.phplist.jobsImageTag | quote }}
-              command: ["sh", "-ec", "backup.sh && db --table < /usr/local/bin/cleanup.sql"]
+              command: ["sh", "-ec", "backup && db --table < /usr/local/bin/cleanup.sql"]
               resources:
 {{ toYaml .Values.phplist.cron.resources | indent 16 }}
               envFrom:
