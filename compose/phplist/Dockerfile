@@ -1,4 +1,4 @@
-FROM docker.io/phplist/phplist:3.7.0
+FROM phplist:3.7.0@sha256:403c58329e0c932d25bfbc337d0869b8e2f9bc3d072eb1dab9244dd3990d0582
 
 USER root
 
