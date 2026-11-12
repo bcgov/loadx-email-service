@@ -46,7 +46,7 @@ phplist:
     port: 8080
   config:
     keepDays: 180
-    rssKeepDays: 180
+    rssKeepDays: 365
     mailHost: TEMP.apps.smtp.gov.bc.ca
     loadFilePath: https://www.th.gov.bc.ca/roadreports/
   secrets:

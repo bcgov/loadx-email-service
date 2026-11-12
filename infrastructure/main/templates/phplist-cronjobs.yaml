@@ -22,11 +22,10 @@ spec:
               command: ["phplist-remote", "get", "delete"]
               resources:
 {{ toYaml .Values.phplist.cron.resources | indent 16 }}
+              envFrom:
+                - configMapRef:
+                    name: {{ include "app.fullname" . }}-phplist
               env:
-                - name: BASE_URL
-                  value: {{ printf "http://%s-phplist:%v/lists/admin" (include "app.fullname" .) .Values.phplist.service.port | quote }}
-                - name: RSS_KEEP_DAYS
-                  value: {{ .Values.phplist.config.rssKeepDays | quote }}
                 - name: REMOTE_SECRET
                   valueFrom:
                     secretKeyRef:

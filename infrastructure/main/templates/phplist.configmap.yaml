@@ -9,6 +9,9 @@ metadata:
 {{- if $configMap }}
 data:
 {{ toYaml $configMap.data | indent 2 }}
+{{ if not (hasKey ($configMap.data | default dict) "RSS_KEEP_DAYS") }}
+  RSS_KEEP_DAYS: {{ .Values.phplist.config.rssKeepDays | quote }}
+{{ end }}
 {{- with $configMap.binaryData }}
 binaryData:
 {{ toYaml . | indent 2 }}
@@ -17,6 +20,7 @@ binaryData:
 data:
   BASE_URL: {{ printf "http://%s-phplist:%v/lists/admin" (include "app.fullname" .) .Values.phplist.service.port | quote }}
   KEEP_DAYS: {{ .Values.phplist.config.keepDays | quote }}
+  RSS_KEEP_DAYS: {{ .Values.phplist.config.rssKeepDays | quote }}
   MAILHOST: {{ .Values.phplist.config.mailHost | quote }}
   LOAD_FILE_PATH: {{ .Values.phplist.config.loadFilePath | quote }}
   PUBLIC_BASE_URL: {{ printf "https://%s" .Values.phplist.route.host | quote }}
