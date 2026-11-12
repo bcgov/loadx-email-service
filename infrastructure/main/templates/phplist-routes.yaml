@@ -5,6 +5,10 @@ kind: Route
 metadata:
   name: {{ template "app.fullname" . }}-phplist
   labels: {{ include "app.labels" . | nindent 4 }}
+  {{- if .Values.phplist.route.applyAllowlistToAllRoutes }}
+  annotations:
+    haproxy.router.openshift.io/ip_allowlist: {{ .Values.phplist.route.allowlist | quote }}
+  {{- end }}
 spec:
   {{- with .Values.phplist.route.host }}
   host: {{ . | quote }}
@@ -26,7 +30,7 @@ metadata:
   name: {{ template "app.fullname" . }}-phplist-admin
   labels: {{ include "app.labels" . | nindent 4 }}
   annotations:
-    haproxy.router.openshift.io/ip_whitelist: {{ .Values.phplist.route.adminWhitelist | quote }}
+    haproxy.router.openshift.io/ip_allowlist: {{ .Values.phplist.route.allowlist | quote }}
 spec:
   {{- with .Values.phplist.route.host }}
   host: {{ . | quote }}
@@ -51,6 +55,9 @@ metadata:
   labels: {{ include "app.labels" . | nindent 4 }}
   annotations:
     helm.sh/resource-policy: keep
+    {{- if .Values.phplist.route.applyAllowlistToAllRoutes }}
+    haproxy.router.openshift.io/ip_allowlist: {{ .Values.phplist.route.allowlist | quote }}
+    {{- end }}
 spec:
   {{- with .Values.phplist.route.vanityHost }}
   host: {{ . | quote }}
@@ -77,7 +84,7 @@ metadata:
   labels: {{ include "app.labels" . | nindent 4 }}
   annotations:
     helm.sh/resource-policy: keep
-    haproxy.router.openshift.io/ip_whitelist: {{ .Values.phplist.route.adminWhitelist | quote }}
+    haproxy.router.openshift.io/ip_allowlist: {{ .Values.phplist.route.allowlist | quote }}
 spec:
   {{- with .Values.phplist.route.vanityHost }}
   host: {{ . | quote }}

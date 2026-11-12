@@ -42,7 +42,8 @@ Treat the values file as a secret. The chart renders Secret resources from these
 | `phplist.secrets.*` | Initial phpList user, admin credentials, and remote-processing secret |
 | `phplist.route.host` | Shared host for both public and admin Routes and the generated `PUBLIC_BASE_URL` |
 | `phplist.route.vanityHost` | Shared host for the generated public and admin vanity Routes |
-| `phplist.route.adminWhitelist` | Admin Route IP allowlist; the admin path is `/list` |
+| `phplist.route.allowlist` | IP allowlist applied to admin Routes; also applied to public Routes when `phplist.route.applyAllowlistToAllRoutes` is enabled |
+| `phplist.route.applyAllowlistToAllRoutes` | Whether to apply the IP allowlist to all public and admin Routes (enabled for test, disabled for production) |
 | `phplist.cron.*` | Job schedules, concurrency, history, deadlines, and requests/limits for all three job containers |
 
 Cron schedules are standard five-field cron expressions. The cleanup schedule is `0 1 * * *`; the chart does not set a `timeZone`, so the Kubernetes controller's timezone determines the schedule's timezone.

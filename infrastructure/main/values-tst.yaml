@@ -57,7 +57,8 @@ phplist:
   route:
     host: tst-loadx-phplist.apps.silver.devops.gov.bc.ca
     vanityHost: tst-loadx.th.gov.bc.ca
-    adminWhitelist: 142.34.53.0/24 142.22.0.0/15 142.24.0.0/13 142.32.0.0/13
+    allowlist: 142.34.53.0/24 142.22.0.0/15 142.24.0.0/13 142.32.0.0/13
+    applyAllowlistToAllRoutes: true
   cron:
     resources:
       limits:
