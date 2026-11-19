@@ -2,7 +2,7 @@ fullnameOverride: tst-loadx
 nameOverride: tst-loadx
 
 mariadb:
-  image: artifacts.developer.gov.bc.ca/docker-remote/library/mariadb:12.3
+  image: artifacts.developer.gov.bc.ca/docker-remote/library/mariadb:13.0
   replicas: 1
   resources:
     limits:
